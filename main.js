@@ -12,31 +12,34 @@ class Calculator {
     this.deleteBtn = $(options.deleteBtn);
     this.clearBtn = $(options.clearBtn);
     this.flag = false;
+    this.span = $(options.span);
   }
 
   main() {
     // Gán sự kiện ckick cho number and operator
     this.addEventClick(this.buttons);
-    this.addEventClick(this.operators);
+    this.addEventClickO(this.operators);
     
     //Btn kết quả '='
     this.equal.onclick = () => {
-      let c = Number(eval(this.inputElement.value).toFixed(5));
-      this.updateString(c.toString());
+      this.displayString = this.displayString.concat(this.inputElement.value);
+      let c = Number(eval(this.displayString).toFixed(5));
+      this.updateString('='+c.toString());
+      this.flag = true;
+      this.span.innerText = '';
     }
 
     this.deleteBtn.onclick = () => {
-      let value = this.displayString.slice(0, -1);
+      let value = this.inputElement.value.slice(0, -1);
+      this.displayString = this.displayString.slice(0, -1);
       this.updateString(value)
     }
 
     this.clearBtn.onclick = () => {
-      this.updateString('')
+      this.updateString('');
+      this.displayString = '';
+      this.span.innerText = '';
     }
-
-    this.inputElement.oninput = (e) => {
-      this.updateString(e.target.value)
-      }
 
     document.addEventListener('keydown', (event) => {
       let listkey  = ['Enter','Backspace','0','1','2','3','4','5','6','7','8','9','.'];
@@ -47,21 +50,34 @@ class Calculator {
       if(name === 'Enter')
         this.updateString(eval(this.inputElement.value).toString());
       // Alert the key name and key code on keydown
-      alert(`Key pressed ${name} \r\n Key code value: ${code}`);
+      // alert(`Key pressed ${name} \r\n Key code value: ${code}`);
     }, false);
   }
   updateString(value) {
-    this.displayString = value;
-    this.inputElement.value = this.displayString;
-    console.log(this.displayString);
+    this.inputElement.value = value;
+    console.log(this.inputElement.value);
   }
 
   addEventClick(arrayBtn) {
     arrayBtn.forEach((Btn) => {
       Btn.onclick = (e) => {
-        this.displayString = this.displayString.concat(`${e.target.value}`);
-        console.log(this.displayString)
-        this.inputElement.value = this.displayString;
+        if(this.flag){
+          this.flag = false;
+          this.updateString('');
+          this.displayString = '';
+        }
+        this.updateString(this.inputElement.value.concat(`${e.target.value}`))
+      }
+    })
+  }
+
+  addEventClickO(arrayBtn) {
+    arrayBtn.forEach((Btn) => {
+      Btn.onclick = (e) => {
+        this.updateString(this.inputElement.value.concat(`${e.target.value}`))
+        this.displayString = this.inputElement.value;
+        this.span.innerText = this.displayString
+        this.updateString('');
       }
     })
   }

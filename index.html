@@ -11,7 +11,8 @@
   <div class="container">
     <div class="main">
       <div class="box-display">
-        <input type="text" style="text-align: right;" autofocus>
+        <div><p id="operand"></p></div>
+        <div style="position: absolute; bottom:0; width:100%; height:80%"><input type="text" style="text-align: right;" autofocus maxlength="12"></div>
       </div>
       <div class="box__function">
         <button id="delete" value="C">C</button>
@@ -50,7 +51,8 @@
       equalBtn : "#equal",
       inputBox : '.box-display input',
       deleteBtn: '.box__function #delete',
-      clearBtn: '.box__function #clear'
+      clearBtn: '.box__function #clear',
+      span: '#operand'
     });
     calculator.main();
   </script>
